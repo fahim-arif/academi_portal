@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "lib": ["es5", "es6", "esnext", "dom"],
+    "target": "es5",
+    "downlevelIteration": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "strict": true,
+    "useUnknownInCatchVariables": false,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "outDir": "./build",
+    "sourceMap": true,
+    "strictPropertyInitialization": false,
+    "typeRoots": ["src/@types", "node_modules/@types"],
+    "skipLibCheck": true
+  }
+}
