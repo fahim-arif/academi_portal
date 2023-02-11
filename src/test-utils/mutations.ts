@@ -1,8 +1,7 @@
 export const Mutations = {
-  // UserResolver Mutations
-  REGISTER_USER: `mutation register($userName: String!, $email: String!, $password: String!) {
-    register(
-      userName: $userName, 
+  REGISTER_TEACHER: `mutation teacherRegister($name: String!, $email: String!, $password: String!) {
+    teacherRegister(
+      name: $name, 
       email: $email, 
       password: $password
     ) {
@@ -12,8 +11,27 @@ export const Mutations = {
       token
     }
   }`,
-  LOGIN: `mutation login($emailOrUsername: String, $password: String, $googleIdToken: String){
-    login(emailOrUsername: $emailOrUsername, password: $password, googleIdToken: $googleIdToken){
+  LOGIN_TEACHER: `mutation teacherLogin($name: String, $password: String){
+    login(name: $name, password: $password){
+      id
+      email
+      token
+    }
+  }`,
+  REGISTER_STUDENT: `mutation studentRegister($name: String!, $email: String!, $password: String!) {
+    studentRegister(
+      name: $name, 
+      email: $email, 
+      password: $password
+    ) {
+      id
+      userName
+      email
+      token
+    }
+  }`,
+  LOGIN_STUDENT: `mutation studentLogin($name: String, $password: String){
+    studentLogin(name: $name, password: $password){
       id
       email
       token

@@ -1,7 +1,7 @@
 import { FindOneOptions } from 'typeorm'
 import { Errors } from '../../constants'
-import { UserDto } from '../../dtos'
-import { User } from '../../entities'
+import { StudentDto, TeacherDto } from '../../dtos'
+import { Student, Teacher } from '../../entities'
 import { IContext } from '../../IContext'
 
 type InitializeVideoUploadData = {
@@ -12,16 +12,26 @@ type InitializeVideoUploadData = {
 }
 
 export class UserService {
-  public static checkUser(user: User | UserDto | undefined) {
+  public static checkUser(user: StudentDto | TeacherDto | Teacher | Student | undefined) {
     if (!user) {
       throw new Error(Errors.USER_NOT_FOUND)
     }
   }
-  public static async getUserFromContext(context: IContext, options?: FindOneOptions<User>): Promise<User | undefined> {
-    let user: User | undefined
+  public static async getStudentFromContext(context: IContext, options?: FindOneOptions<Student>): Promise<Student | undefined> {
+    let user: Student | undefined
 
     if (context?.id) {
-      user = await User.findOne(context.id, options!)
+      user = await Student.findOne(context.id, options!)
+    }
+
+    return user
+  }
+
+  public static async getUserFromContext(context: IContext, options?: FindOneOptions<Teacher>): Promise<Teacher | undefined> {
+    let user: Teacher | undefined
+
+    if (context?.id) {
+      user = await Teacher.findOne(context.id, options!)
     }
 
     return user

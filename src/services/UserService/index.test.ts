@@ -1,4 +1,3 @@
-import { User } from '../../entities'
 import { IContext } from '../../IContext'
 import { TestUtils } from '../../test-utils/TestUtils'
 import { UserService } from '.'
@@ -22,7 +21,7 @@ beforeEach(async () => {
 describe('UserService', () => {
   describe('getUserFromContext()', () => {
     it('getUserFromContext() with valid user', async () => {
-      const user = await TestUtils.createUser()
+      const user = await TestUtils.createStudent()
       const context: IContext = {
         id: user.id,
         email: user.email,

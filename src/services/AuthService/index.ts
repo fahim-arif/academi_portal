@@ -1,7 +1,7 @@
 import { OAuth2Client, TokenPayload } from 'google-auth-library'
 import { UserService } from '..'
 import { Errors } from '../../constants'
-import { User } from '../../entities'
+import { Teacher, Student } from '../../entities'
 import { IContext } from '../../IContext'
 import { ResolverUtils } from '../../resolvers'
 
@@ -12,7 +12,7 @@ export class AuthService {
     this.client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
   }
 
-  public static checkAdmin = (user: User | undefined) => {
+  public static checkAdmin = (user: Teacher | undefined) => {
     ResolverUtils.checkUser(user)
 
     if (!user!.isAdmin) {

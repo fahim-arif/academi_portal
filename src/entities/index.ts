@@ -1,2 +1,2 @@
-export { User } from './User'
-    
+export { Student } from './Student'
+export { Teacher } from './Teacher'

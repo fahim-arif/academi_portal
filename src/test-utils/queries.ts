@@ -1,12 +1,20 @@
 export const Queries = {
-  // UserResolver Queries
-  CURRENT_USER: `
+  CURRENT_TEACHER: `
     {
-      currentUser {
+      currentTeacher  {
         id
         email
         userName
       }
     }
   `,
+  CURRENT_STUDENT: `
+  {
+    currentStudent  {
+      id
+      email
+      userName
+    }
+  }
+`,
 }

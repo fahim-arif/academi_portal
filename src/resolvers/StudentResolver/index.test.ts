@@ -3,7 +3,7 @@ import faker from 'faker'
 import { MINIMUM_PASSWORD_LENGTH, Errors, SPECIAL_CHAR } from '../../constants'
 import { TestUtils } from '../../test-utils/TestUtils'
 import { Mutations } from '../../test-utils/mutations'
-import { User } from '../../entities'
+import { Student } from '../../entities'
 
 beforeAll(async () => {
   await TestUtils.setup('UserResolver')
@@ -24,7 +24,7 @@ describe('UserResolver', () => {
       const userName = faker.internet.userName()
 
       const response = await graphQlCall({
-        source: Mutations.REGISTER_USER,
+        source: Mutations.REGISTER_STUDENT,
         variableValues: {
           userName,
           email,
@@ -35,24 +35,23 @@ describe('UserResolver', () => {
       const userReturned = response.data!.register
 
       expect(userReturned.id).toBeTruthy()
-      expect(userReturned.userName).toBe(userName)
+      expect(userReturned.name).toBe(userName)
       expect(userReturned.email).toBe(email.toLowerCase())
       expect(userReturned.token).toBeTruthy()
 
       // Check db too
-      const dbUser = await User.findOneOrFail({ where: { email: email.toLowerCase() } })
+      const dbUser = await Student.findOneOrFail({ where: { email: email.toLowerCase() } })
       expect(dbUser).toBeDefined()
       expect(dbUser.id).toBeGreaterThan(0)
       expect(dbUser.email).toBe(email.toLowerCase())
-      expect(dbUser.userName).toBe(userName)
       expect(dbUser.token).toBeDefined()
     })
 
     it('register() reject duplicate username with different case', async () => {
-      await TestUtils.createUser({ userName: 'first' })
+      await TestUtils.createStudent({ userName: 'first' })
 
       const response = await graphQlCall({
-        source: Mutations.REGISTER_USER,
+        source: Mutations.REGISTER_STUDENT,
         variableValues: {
           userName: 'First',
           email: faker.internet.email(),
@@ -67,9 +66,9 @@ describe('UserResolver', () => {
 
     it('register() reject duplicate email with +', async () => {
       const email = 'first@test.com'
-      await TestUtils.createUser({ email })
+      await TestUtils.createStudent({ email })
       const response = await graphQlCall({
-        source: Mutations.REGISTER_USER,
+        source: Mutations.REGISTER_STUDENT,
         variableValues: {
           userName: 'First',
           email: 'first+2@test.com',
@@ -86,12 +85,12 @@ describe('UserResolver', () => {
   describe('login()', () => {
     it('login with email', async () => {
       const password = faker.internet.password(MINIMUM_PASSWORD_LENGTH, false, /\w/, SPECIAL_CHAR)
-      const user = await TestUtils.createUser({ password })
+      const user = await TestUtils.createStudent({ password })
 
       const response = await graphQlCall({
-        source: Mutations.LOGIN,
+        source: Mutations.LOGIN_STUDENT,
         variableValues: {
-          emailOrUsername: user.email,
+          email: user.email,
           password,
         },
       })
@@ -103,12 +102,12 @@ describe('UserResolver', () => {
 
     it('login with username', async () => {
       const password = faker.internet.password(MINIMUM_PASSWORD_LENGTH, false, /\w/, SPECIAL_CHAR)
-      const user = await TestUtils.createUser({ password })
+      const user = await TestUtils.createStudent({ password })
 
       const response = await graphQlCall({
-        source: Mutations.LOGIN,
+        source: Mutations.LOGIN_STUDENT,
         variableValues: {
-          emailOrUsername: user.userName,
+          email: user.email,
           password: password,
         },
       })
@@ -120,11 +119,11 @@ describe('UserResolver', () => {
 
     it('login with case insentive username', async () => {
       const password = faker.internet.password(MINIMUM_PASSWORD_LENGTH, false, /\w/, SPECIAL_CHAR)
-      const user = await TestUtils.createUser({ password })
+      const user = await TestUtils.createStudent({ password })
       const response = await graphQlCall({
-        source: Mutations.LOGIN,
+        source: Mutations.LOGIN_STUDENT,
         variableValues: {
-          emailOrUsername: user.userName.toUpperCase(),
+          email: user.email.toUpperCase(),
           password,
         },
       })
@@ -136,9 +135,9 @@ describe('UserResolver', () => {
 
     it('email or username not found', async () => {
       const response = await graphQlCall({
-        source: Mutations.LOGIN,
+        source: Mutations.LOGIN_STUDENT,
         variableValues: {
-          emailOrUsername: 'very@wrong.com',
+          email: 'very@wrong.com',
           password: 'wjatever',
         },
       })
@@ -149,12 +148,12 @@ describe('UserResolver', () => {
     })
 
     it('login in with wrong password', async () => {
-      const user = await TestUtils.createUser()
+      const user = await TestUtils.createStudent()
 
       const response = await graphQlCall({
-        source: Mutations.LOGIN,
+        source: Mutations.LOGIN_STUDENT,
         variableValues: {
-          emailOrUsername: user.email,
+          email: user.email,
           password: 'wrongPass',
         },
       })
@@ -166,12 +165,12 @@ describe('UserResolver', () => {
 
     it('login in with a + in the email', async () => {
       const password = faker.internet.password()
-      const user = await TestUtils.createUser({ email: 'email@test.com' })
+      const user = await TestUtils.createStudent({ email: 'email@test.com' })
 
       const response = await graphQlCall({
-        source: Mutations.LOGIN,
+        source: Mutations.LOGIN_STUDENT,
         variableValues: {
-          emailOrUsername: 'email+test@test.com',
+          email: 'email+test@test.com',
           password,
         },
       })

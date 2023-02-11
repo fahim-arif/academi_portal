@@ -1,1 +1,2 @@
-export { UserDto } from './UserDto'
+export { StudentDto } from './StudentDto'
+export { TeacherDto } from './TeacherDto'

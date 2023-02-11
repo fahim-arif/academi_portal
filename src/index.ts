@@ -75,7 +75,7 @@ const startServer = async () => {
     json(),
     expressMiddleware(apolloServer, {
       context: async ({ req }) => {
-        const context = getContextFromAuthHeader(req?.get(`Authorization`), req?.get(`Fingerprint`))
+        const context = getContextFromAuthHeader(req?.get(`Authorization`))
         return context
       },
     })
@@ -84,7 +84,7 @@ const startServer = async () => {
   httpServer.listen(process.env.PORT)
 }
 
-export function getContextFromAuthHeader(authHeader: string | undefined, fingerprintHeader: string | undefined) {
+export function getContextFromAuthHeader(authHeader: string | undefined) {
   let context: Partial<IContext> = {}
 
   if (authHeader) {

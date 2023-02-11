@@ -1,3 +1,3 @@
-import { User } from '../entities'
+import { Student, Teacher } from '../entities'
 
-export const entities = [User]
+export const entities = [Teacher, Student]

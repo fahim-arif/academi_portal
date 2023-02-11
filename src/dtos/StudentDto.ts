@@ -1,9 +1,9 @@
 import { IsDate, IsNumber, IsString, IsArray } from 'class-validator'
 import { Field, ID, ObjectType } from 'type-graphql'
-import { User } from '../entities'
+import { Student } from '../entities'
 
 @ObjectType()
-export class UserDto {
+export class StudentDto {
   @IsNumber()
   @Field(() => ID)
   public id: number
@@ -22,12 +22,12 @@ export class UserDto {
 
   @IsString()
   @Field(() => String)
-  public userName: string
+  public name: string
 
-  constructor(user: User) {
+  constructor(user: Student) {
     this.id = user.id
     this.createdAt = user.createdAt
     // this.imageId = user.imageId
-    this.userName = user.userName
+    this.name = user.name
   }
 }

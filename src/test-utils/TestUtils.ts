@@ -1,7 +1,7 @@
 import { Connection, createConnection, getConnection } from 'typeorm'
 import { SnakeNamingStrategy } from '../db'
 import { entities } from '../db/ormConfig'
-import { User } from '../entities'
+import { Student, Teacher } from '../entities'
 import faker from 'faker'
 import { MINIMUM_PASSWORD_LENGTH, SPECIAL_CHAR } from '../constants'
 import { ExecutionResult } from 'graphql'
@@ -22,8 +22,8 @@ export class TestUtils {
   private static postgresConnection: Connection
   public static polly: Polly
 
-  public static async createAdmin(): Promise<User> {
-    const admin = await TestUtils.createUser({ isAdmin: true })
+  public static async createAdmin(): Promise<Student> {
+    const admin = await TestUtils.createStudent({ isAdmin: true })
     return admin
   }
 
@@ -35,20 +35,34 @@ export class TestUtils {
     }
   }
 
-  public static async createUser(options?: ICreateUserOptions): Promise<User> {
-    const user = new User()
+  public static async createStudent(options?: ICreateUserOptions): Promise<Student> {
+    const user = new Student()
     if (!options?.noEmail) {
       user.email = options?.email || faker.internet.email().toLowerCase()
     }
-    user.userName = faker.internet.userName()
+    user.email = faker.internet.email()
     user.password = await StringUtils.hashPassword(
       options?.password || faker.internet.password(MINIMUM_PASSWORD_LENGTH, false, /\w/, SPECIAL_CHAR)
     )
     user.token = faker.random.alphaNumeric(20)
-    user.isAdmin = options?.isAdmin || false
-    user.userName = options?.userName || faker.internet.userName()
+    user.email = options?.email || faker.internet.email()
 
-    if (options?.forgotPasswordCode !== undefined) user.forgotPasswordCode = options.forgotPasswordCode
+    await user.save()
+
+    return user
+  }
+
+  public static async createTeacher(options?: ICreateUserOptions): Promise<Student> {
+    const user = new Student()
+    if (!options?.noEmail) {
+      user.email = options?.email || faker.internet.email().toLowerCase()
+    }
+    user.email = faker.internet.email()
+    user.password = await StringUtils.hashPassword(
+      options?.password || faker.internet.password(MINIMUM_PASSWORD_LENGTH, false, /\w/, SPECIAL_CHAR)
+    )
+    user.token = faker.random.alphaNumeric(20)
+    user.email = options?.email || faker.internet.email()
 
     await user.save()
 

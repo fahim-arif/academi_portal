@@ -15,18 +15,14 @@ import { Type } from '../types/User'
 
 @Entity()
 @ObjectType()
-export class User extends BaseEntity {
+export class Teacher extends BaseEntity {
   @Field(() => ID!)
   @PrimaryGeneratedColumn()
   public id: number
 
-  @Field(() => String, { nullable: true })
-  @Column({ unique: true, nullable: true })
-  public email?: string
-
-  @Field(() => String, { nullable: true })
-  @Column({ unique: true, nullable: true })
-  public googleIdToken: string
+  @Field(() => String)
+  @Column({ unique: true })
+  public email: string
 
   @Field(() => Boolean)
   @Column({ default: false })
@@ -39,18 +35,23 @@ export class User extends BaseEntity {
   @Column({ nullable: true })
   public password: string
 
-  @Column({ nullable: true })
-  public forgotPasswordCode: string
+  @Field(() => String)
+  @Column()
+  public name: string
+
+  @Field(() => Int)
+  @Column()
+  public phone: number
 
   @Field(() => String)
-  @Column({ unique: true })
-  public userName: string
+  @Column()
+  public department: string
+
+  @Field(() => String, { nullable: true })
+  @Column({ nullable: true })
+  public designation?: string
 
   @Field(() => Date!)
   @CreateDateColumn({ type: 'timestamptz' })
   public createdAt: Date
-
-  @Field(() => Type)
-  @Column({ default: Type.STUDENT })
-  public type: Type
 }
