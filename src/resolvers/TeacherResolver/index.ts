@@ -67,26 +67,29 @@ export class TeacherResolver {
     @Arg(`name`, { nullable: true }) name: string,
     @PubSub() pubSubEngine?: PubSubEngine
   ): Promise<Teacher> {
+    console.log('trig')
+
     let user
 
     if (email && password) {
       email = UserService.sanitizeEmail(email)
+      console.log('trig2')
 
-      // First check if user already exists
-      user = await Teacher.findOne({ where: [{ email }, { name: ILike(name) }] })
-
-      // Password must contain at least one lowercase, one uppercase, one number, one special character (e.g. !@#$%^&*)
-      if (password.length < MINIMUM_PASSWORD_LENGTH || !password.match(REGEX_PATTERN)) {
-        throw new Error(Errors.WEAK_PASSWORD)
-      }
+ 
     }
 
     if (user) throw new Error(Errors.ALREADY_EXISTS)
+    console.log('trig4')
 
     user = new Teacher()
-
+    user.phone = 12345
+    user.department = 'cse'
+    console.log('trig55555')
     user.password = await StringUtils.hashPassword(password!)
+    console.log(user.password)
+    console.log('trig6')
     await user.save()
+    console.log('last')
 
     return this.teacherLogin(context, user.email, password!)
   }
